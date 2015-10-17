@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">ShutterShare</string>
+
+    <string name="flashPage">Welcome to ShutterShare</string>
+    <string name="userContext">Welcome to Context Page 1</string>
+    <string name="userContext1">Welcome to Context Page 2</string>
+    <string name="userContext2">Welcome to Context Page 3</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_user_contex_page">UserContexPage</string>
+    <string name="title_activity_user_context">UserContextActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_login">Login</string>
+    <string name="loginPage">Welcome to login page!</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

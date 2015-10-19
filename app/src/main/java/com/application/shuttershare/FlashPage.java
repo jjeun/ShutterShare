@@ -7,6 +7,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+
+/*
+* Authors: Jesse Jeun
+* Date: 10-19-2015
+* Description: FlashPage Activity - Activity page that will display the apps logo as the opening screen.
+*/
+
+
 public class FlashPage extends AppCompatActivity {
 
     CountDownTimer timer;

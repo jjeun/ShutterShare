@@ -22,8 +22,9 @@ public class FlashPage extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //thought this would remove the nav bar, no luck
+        //this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_flash_page);
 
             timer = new CountDownTimer(3000, 1000) {

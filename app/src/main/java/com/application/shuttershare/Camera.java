@@ -87,7 +87,7 @@ public class Camera extends Fragment{
         return rootView;
 
     }
-// Code to Open camera
+// Code for functionality of camera
     public void goGoGadgetCamera (View v){
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -100,6 +100,7 @@ public class Camera extends Fragment{
         getActivity().startActivityForResult(intent, 1);
     }
 
+    // to receive result of camera
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == TAKE_PIC && resultCode==getActivity().RESULT_OK){
             Toast.makeText(getActivity(), outPutfileUri.toString(), Toast.LENGTH_LONG).show();

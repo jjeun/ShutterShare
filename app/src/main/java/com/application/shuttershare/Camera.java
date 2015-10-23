@@ -15,6 +15,8 @@ import android.widget.Toast;
 import android.support.v7.app.AppCompatActivity;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /*
@@ -32,8 +34,6 @@ public class Camera extends Fragment{
     public static final String TAG = "CameraFragment";
     static int TAKE_PIC = 1;
     Uri outPutfileUri;
-    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-
 
 
     /**
@@ -92,12 +92,17 @@ public class Camera extends Fragment{
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+        // getting date and time to be used to create a unique image name -- JJ
+        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd_HHmmss");
+        String currentDateAndTime = sdf.format(new Date());
+
         File file = new File(Environment.getExternalStorageDirectory(),
-                "MyPhoto.jpg");
+                "MyPhoto_"+currentDateAndTime+".jpg");
+
         outPutfileUri = Uri.fromFile(file);
         //launch camera
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outPutfileUri);
-        getActivity().startActivityForResult(intent, 1);
+        getActivity().startActivityForResult(intent, TAKE_PIC);
     }
 
     // to receive result of camera

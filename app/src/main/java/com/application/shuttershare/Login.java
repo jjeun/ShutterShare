@@ -1,11 +1,13 @@
 package com.application.shuttershare;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 /*
 * Authors: Jesse Jeun
@@ -17,26 +19,42 @@ import android.widget.Button;
 public class Login extends AppCompatActivity {
 
     // Variables declared for the class
-    public static final String TAG = "EventCode";
+    public static final String TAG = "LoginPage";
     Button submitButton;
+    EditText username;
+    EditText email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // intializing exitButton to value of type Button with id eventtButton
-        submitButton = (Button) findViewById(R.id.loginButton);
+        SharedPreferences shared = getSharedPreferences("shared", MODE_PRIVATE);
 
-        // creating on click listener for submitButton
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v(TAG, "Submit Button Clicked For EventCode Page");
 
-                submit(); // calling the submit method
-            }
-        });
+        // condition that will check if variable username and email exists in shared prefrences if it does
+        // it will by pass the activity and move to the next
+        if(shared.contains("username") && shared.contains("email")){
+
+            Intent intent = new Intent(this, EventCode.class);
+            startActivity(intent);  // starting the intent
+
+        } else {
+
+            submitButton = (Button) findViewById(R.id.loginButton);
+            username = (EditText) findViewById(R.id.name);
+            email = (EditText) findViewById(R.id.email);
+
+            // creating on click listener for submitButton
+            submitButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v(TAG, "Submit Button Clicked For Login Page");
+                    saveInformation(username.getText().toString(), email.getText().toString());
+                    submit(); // calling the submit method
+                }
+            });
+        }
     }
 
 
@@ -53,5 +71,17 @@ public class Login extends AppCompatActivity {
     @Override
     public void onBackPressed(){
         // intentionally left empty to disable back button
+    }
+
+
+    // method that will place information in the shared prefrences of the device
+    // this will be used to determine if the user is a firstimer to the app.
+    // if not then portions of the app will be bypassed.
+    public void saveInformation(String username,String email) {
+        SharedPreferences shared = getSharedPreferences("shared", MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared.edit();
+        editor.putString("username", username);
+        editor.putString("email", email);
+        editor.commit();
     }
 }

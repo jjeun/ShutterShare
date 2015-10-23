@@ -1,10 +1,20 @@
 package com.application.shuttershare;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.support.v7.app.AppCompatActivity;
+
+import java.io.File;
 
 
 /*
@@ -15,11 +25,16 @@ import android.view.ViewGroup;
 
 
 
-public class Camera extends Fragment {
+public class Camera extends Fragment{
 
     // Declaring variables to be used in the class
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "CameraFragment";
+    static int TAKE_PIC = 1;
+    Uri outPutfileUri;
+    private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+
+
 
     /**
      * Use this factory method to create a new instance of
@@ -42,6 +57,8 @@ public class Camera extends Fragment {
         // Required empty public constructor
     }
 
+    Button ClickMe;
+    TextView tv;
 
 
     // onCreate variable for fragment
@@ -56,6 +73,37 @@ public class Camera extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_camera, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_camera, container, false);
+
+        ClickMe = (Button) rootView.findViewById(R.id.cameraButton);
+
+        ClickMe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goGoGadgetCamera(getView());
+
+            }
+        });
+        return rootView;
+
+    }
+// Code for functionality of camera
+    public void goGoGadgetCamera (View v){
+        // create Intent to take a picture and return control to the calling application
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        File file = new File(Environment.getExternalStorageDirectory(),
+                "MyPhoto.jpg");
+        outPutfileUri = Uri.fromFile(file);
+        //launch camera
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, outPutfileUri);
+        getActivity().startActivityForResult(intent, 1);
+    }
+
+    // to receive result of camera
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == TAKE_PIC && resultCode==getActivity().RESULT_OK){
+            Toast.makeText(getActivity(), outPutfileUri.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 }

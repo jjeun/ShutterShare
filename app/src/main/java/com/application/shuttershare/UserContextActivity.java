@@ -1,6 +1,8 @@
 package com.application.shuttershare;
 
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -9,6 +11,10 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 
 
@@ -32,10 +38,23 @@ public class UserContextActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_context);
 
-        mPager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
-        mPager.setAdapter(mPagerAdapter);
+        SharedPreferences shared = getSharedPreferences("shared", MODE_PRIVATE);
 
+        // condition that will check if variable seasoned exists in shared prefrences if it does
+        // it will by pass the activity and move to the next
+        if (shared.contains("seasoned")) {
+
+            Intent intent = new Intent(this, EventCode.class);
+            startActivity(intent);  // starting the intent
+
+        } else {
+
+            saveInformation();
+            mPager = (ViewPager) findViewById(R.id.pager);
+            mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
+            mPager.setAdapter(mPagerAdapter);
+
+        }
     }
 
 
@@ -86,5 +105,17 @@ public class UserContextActivity extends FragmentActivity {
         }
 
     }
+
+
+    // method that will place information in the shared prefrences of the device
+    // this will be used to determine if the user is a firstimer to the app.
+    // if not then portions of the app will be bypassed.
+    public void saveInformation() {
+        SharedPreferences shared = getSharedPreferences("shared", MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared.edit();
+        editor.putBoolean("seasoned", true);
+        editor.commit();
+    }
+
 
 }

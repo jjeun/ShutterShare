@@ -21,8 +21,8 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:ems="10"
-        android:id="@+id/editText"
-        android:layout_above="@+id/editText2"
+        android:id="@+id/name"
+        android:layout_above="@+id/email"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="61dp" />
 
@@ -31,10 +31,10 @@
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
-        android:id="@+id/editText2"
+        android:id="@+id/email"
         android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText" />
+        android:layout_alignLeft="@+id/name"
+        android:layout_alignStart="@+id/name" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -42,7 +42,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="full name"
         android:id="@+id/textView2"
-        android:layout_above="@+id/editText"
+        android:layout_above="@+id/name"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -51,7 +51,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="email address"
         android:id="@+id/textView3"
-        android:layout_above="@+id/editText2"
+        android:layout_above="@+id/email"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

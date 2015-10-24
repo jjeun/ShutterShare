@@ -17,6 +17,9 @@
     <color name="mainFont">#3c393a</color>
 
 
+    <!-- Generic Colors-->
+    <color name="black">#000000</color>
+
 
 
 </resources>

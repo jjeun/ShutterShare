@@ -34,16 +34,12 @@ public class FlashPage extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                closeScreen();
+                checkFirstRun();
             }
         }.start();
     }
 
-    private void closeScreen() {
-        Intent intent = new Intent(this, UserContextActivity.class);
-        startActivity(intent);
-        finish();
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -65,5 +61,36 @@ public class FlashPage extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+// Checks if program should display user context activity or go straight to main activity
+    public void checkFirstRun() {
+        boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
+        if (isFirstRun){
+
+            submit();
+
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isFirstRun", false)
+                    .apply();
+        }
+        else{
+            closeScreen();
+
+        }
+    }
+
+    // Method to create intent and activate it
+    public void submit(){
+
+        // creating object intent of class Intent that will redirect to MainActivity page
+        Intent intent = new Intent(this, EventCode.class);
+        startActivity(intent);  // starting the intent
+    }
+
+    private void closeScreen() {
+        Intent intent = new Intent(this, UserContextActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

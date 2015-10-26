@@ -1,5 +1,6 @@
 package com.application.shuttershare;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -26,11 +27,11 @@ public class MainActivity extends FragmentActivity {
 
     int page;
 
-    public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
+    public class SampleFragmentPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.IconTabProvider {
 
         // declared variables for the class
-        final int PAGE_COUNT = 4;
-        private String tabTitles[] = new String[] { "Camera", "Video", "Gallery", "Settings"};
+        final int PAGE_COUNT = 3;
+        private int tabIcons[] = {R.drawable.camera, R.drawable.gallery, R.drawable.settings};
 
         // method for fragment page adapter
         public SampleFragmentPagerAdapter(FragmentManager fm) {
@@ -53,10 +54,8 @@ public class MainActivity extends FragmentActivity {
                 case 0:
                     return Camera.newInstance(position + 1);
                 case 1:
-                    return Video.newInstance(position + 1);
-                case 2:
                     return Gallery.newInstance(position + 1);
-                case 3:
+                case 2:
                     return Settings.newInstance(position + 1);
                 default:
                     return null;
@@ -66,10 +65,10 @@ public class MainActivity extends FragmentActivity {
 
         // method that will generate the page titles based on fragment page position
         @Override
-        public CharSequence getPageTitle(int position) {
+        public int getPageIconResId(int position) {
 
             // Generate title based on item position
-            return tabTitles[position];
+            return tabIcons[position];
         }
     }
 
@@ -98,6 +97,15 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onBackPressed(){
         // intentionally left empty to disable back button
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Override this method in the activity that hosts the Fragment and call super
+        // in order to receive the result inside onActivityResult from the fragment.
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
 }

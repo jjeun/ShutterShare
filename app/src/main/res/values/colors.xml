@@ -17,8 +17,13 @@
     <color name="mainFont">#3c393a</color>
 
 
+    <!-- UploadActivity -->
+    <color name="textFont">#4e5572</color>
+
+
     <!-- Generic Colors-->
     <color name="black">#000000</color>
+
 
 
 

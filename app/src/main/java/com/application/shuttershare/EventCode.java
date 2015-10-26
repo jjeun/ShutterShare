@@ -8,6 +8,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -26,16 +39,24 @@ public class EventCode extends AppCompatActivity {
     Button submitButton;
     EditText eventCode;
 
+    HttpPost httppost;
+    StringBuffer buffer;
+    HttpResponse response;
+    HttpClient httpclient;
+    InputStream inputStream;
+    SharedPreferences app_preferences ;
+    List<NameValuePair> nameValuePairs;
+    String code;
+    byte[] data;
+
     // onCreate Method
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_code);
 
-
-        // TODO: 10/22/2015 Need to enter code here to get date info from database to make sure not expired and eventcode exists.
-
-        SharedPreferences shared = getSharedPreferences("shared", MODE_PRIVATE);
+        // declaring shared of type SharedPreferences
+        SharedPreferences shared = getSharedPreferences("SHUTTER_SHARE", MODE_PRIVATE);
 
         // condition that will check if variable eventcode exists in shared prefrences if it does
         // it will by pass the activity and move to the next
@@ -55,8 +76,47 @@ public class EventCode extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Log.v(TAG, "Submit Button Clicked For Login Page");
-                    saveInformation(eventCode.getText().toString());
-                    submit(); // calling the submit method
+
+                    code = eventCode.getText().toString();
+                    saveInformation(code);
+
+                    try {
+                        httpclient = new DefaultHttpClient();
+                        httppost = new HttpPost(UploadConfig.CHECK_URL);
+                        // Add your data
+                        nameValuePairs = new ArrayList<NameValuePair>(1);
+                        nameValuePairs.add(new BasicNameValuePair("eventCode", code.trim()));
+                        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                        // Execute HTTP Post Request
+                        response = httpclient.execute(httppost);
+                        inputStream = response.getEntity().getContent();
+
+                        data = new byte[256];
+
+                        buffer = new StringBuffer();
+                        int len;
+                        while (-1 != (len = inputStream.read(data)) )
+                        {
+                            buffer.append(new String(data, 0, len));
+                        }
+
+                        inputStream.close();
+                    }
+
+                    catch (Exception e)
+                    {
+                        Toast.makeText(EventCode.this, "Sorry! There was a Database error", Toast.LENGTH_LONG).show();
+                    }
+                    if(buffer.charAt(0)=='Y')
+                    {
+                        Toast.makeText(EventCode.this, "Event Code Exists", Toast.LENGTH_LONG).show();
+                        submit(); // calling the submit method
+                    }
+                    else
+                    {
+                        Toast.makeText(EventCode.this, "Invalid Event Code", Toast.LENGTH_LONG).show();
+                    }
                 }
             });
         }
@@ -83,7 +143,7 @@ public class EventCode extends AppCompatActivity {
     // this will be used to determine if the user is a firstimer to the app.
     // if not then portions of the app will be bypassed.
     public void saveInformation(String eventcode) {
-        SharedPreferences shared = getSharedPreferences("shared", MODE_PRIVATE);
+        SharedPreferences shared = getSharedPreferences("SHUTTER_SHARE", MODE_PRIVATE);
         SharedPreferences.Editor editor = shared.edit();
         editor.putString("eventcode", eventcode);
         editor.commit();

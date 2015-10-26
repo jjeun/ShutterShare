@@ -29,7 +29,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        SharedPreferences shared = getSharedPreferences("shared", MODE_PRIVATE);
+        SharedPreferences shared = getSharedPreferences("SHUTTER_SHARE", MODE_PRIVATE);
 
 
         // condition that will check if variable username and email exists in shared prefrences if it does
@@ -78,7 +78,7 @@ public class Login extends AppCompatActivity {
     // this will be used to determine if the user is a firstimer to the app.
     // if not then portions of the app will be bypassed.
     public void saveInformation(String username,String email) {
-        SharedPreferences shared = getSharedPreferences("shared", MODE_PRIVATE);
+        SharedPreferences shared = getSharedPreferences("SHUTTER_SHARE", MODE_PRIVATE);
         SharedPreferences.Editor editor = shared.edit();
         editor.putString("username", username);
         editor.putString("email", email);

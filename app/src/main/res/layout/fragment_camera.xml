@@ -3,9 +3,12 @@
     android:layout_height="match_parent" tools:context="com.application.shuttershare.Camera">
 
 
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/camera"
-        android:gravity="center" />
+    <!-- To display picture taken -->
+    <ImageView
+        android:id="@+id/imgPreview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/cameraButton" />
 
     <Button
         android:layout_width="wrap_content"

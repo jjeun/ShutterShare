@@ -38,7 +38,7 @@ public class UserContextActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_context);
 
-        SharedPreferences shared = getSharedPreferences("shared", MODE_PRIVATE);
+        SharedPreferences shared = getSharedPreferences("SHUTTER_SHARE", MODE_PRIVATE);
 
         // condition that will check if variable seasoned exists in shared prefrences if it does
         // it will by pass the activity and move to the next
@@ -111,7 +111,7 @@ public class UserContextActivity extends FragmentActivity {
     // this will be used to determine if the user is a firstimer to the app.
     // if not then portions of the app will be bypassed.
     public void saveInformation() {
-        SharedPreferences shared = getSharedPreferences("shared", MODE_PRIVATE);
+        SharedPreferences shared = getSharedPreferences("SHUTTER_SHARE", MODE_PRIVATE);
         SharedPreferences.Editor editor = shared.edit();
         editor.putBoolean("seasoned", true);
         editor.commit();

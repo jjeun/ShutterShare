@@ -1,10 +1,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="com.application.shuttershare.Gallery">
+    android:layout_height="match_parent" tools:context="com.application.shuttershare.Gallery"
+    android:background="@color/blue">
 
 
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/gallery"
-        android:gravity="center" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentTop="true"
+        android:id="@+id/eventDescription"
+        android:background="@color/dark_green"
+        android:textColor="@color/orange"/>
+
+
+    <ImageButton
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/camerabutton"
+        android:id="@+id/galleryButton"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="false"
+        android:layout_below="@+id/eventDescription"
+        android:layout_marginTop="25dp" />
 
 </RelativeLayout>

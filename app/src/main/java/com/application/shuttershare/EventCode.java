@@ -1,32 +1,32 @@
 package com.application.shuttershare;
 
-import android.content.Entity;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -39,26 +39,23 @@ import java.util.List;
 */
 
 
-public class EventCode extends AppCompatActivity {
+public class EventCode extends Activity {
 
     // Variables declared for the class
     public static final String TAG = "EventCode";
-    Button submitButton;
+    ImageButton submitButton;
     EditText eventCode;
 
-    HttpPost httppost;
-    StringBuffer buffer;
-    HttpResponse response;
-    HttpClient httpclient;
-    List<NameValuePair> nameValuePairs;
-    String success;
+    int success;
     String eventcode;
     String description;
     String date;
     int days;
 
-
+    private ProgressDialog pDialog;
     JSONArray event = null;
+    JSONParser jsonParser = new JSONParser();
+
 
     // onCreate Method
     @Override
@@ -71,15 +68,18 @@ public class EventCode extends AppCompatActivity {
 
         // condition that will check if variable eventcode exists in shared prefrences if it does
         // it will by pass the activity and move to the next
-        if (shared.contains("eventcode")) {
+        if (shared.contains("eventcode") && checkDate()) {
 
             Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);  // starting the intent
 
         } else {
 
-            // intializing exitButton to value of type Button with id eventtButton
-            submitButton = (Button) findViewById(R.id.eventButton);
+            // intializing submitButton to value of type Button with id eventButton
+            submitButton = (ImageButton) findViewById(R.id.eventButton);
             eventCode = (EditText) findViewById(R.id.eventcode);
 
             // creating on click listener for submitButton
@@ -87,82 +87,69 @@ public class EventCode extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Log.v(TAG, "Submit Button Clicked For Login Page");
-
-
-                    try {
-
-                        // TODO: 10/27/2015 Need to re-code this try section. This code is not hitting the database at all.
-
-                        httpclient = new DefaultHttpClient();
-                        httppost = new HttpPost(UploadConfig.CHECK_URL);
-                        // Add your data
-                        nameValuePairs = new ArrayList<NameValuePair>();
-                        nameValuePairs.add(new BasicNameValuePair("eventCode", eventcode.trim()));
-                        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                        // Execute HTTP Post Request
-                        response = httpclient.execute(httppost);
-                        String responseString = response.toString();
-
-                        JSONObject json = new JSONObject(responseString);
-                        success = json.getString("sucess");
-
-                        Log.v(TAG, success);
-
-                        JSONArray event = json.getJSONArray("event");
-
-//                        for (int i=0; i < event.length(); i++){
-//                            JSONObject c = event.getJSONObject(i);
-//
-//                            eventcode = c.getString("eventcode");
-//                            description = c.getString("description");
-//                            date = c.getString("date");
-//                            days = c.getInt("days");
-//
-//                        }
-
-
-                    }
-
-                    catch (Exception e)
-                    {
-                        Toast.makeText(EventCode.this, "Sorry! There was a Database error", Toast.LENGTH_LONG).show();
-                        Log.v(TAG, e.toString());
-                    }
-
-
-                    if(success == "1")
-                    {
-                        Toast.makeText(EventCode.this, "Event Code Exists", Toast.LENGTH_LONG).show();
-                        saveInformation(eventcode, description, date, days );
-                        submit(); // calling the submit method
-                    }
-                    else
-                    {
-                        Toast.makeText(EventCode.this, "Invalid Event Code", Toast.LENGTH_LONG).show();
-                        tryAgain();
-                    }
+                    eventcode = eventCode.getText().toString().trim();
+                    Log.v(TAG, eventcode);
+                    new CheckEventCode().execute();
                 }
             });
         }
     }
 
 
-    // Method to create intent and activate it
+    // Method to create intent and send user to Main
     public void submit(){
 
         // creating object intent of class Intent that will redirect to MainActivity page
+        Toast.makeText(getApplicationContext(),"Event Code Success!", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);  // starting the intent
     }
 
 
-    // Method to create intent and activate it
-    public void tryAgain(){
 
-        // creating object intent of class Intent that will redirect to MainActivity page
-        Intent intent = new Intent(this, EventCode.class);
-        startActivity(intent);  // starting the intent
+    // method that will be used the check if the event date has expired.
+    // will return false if expired of true if the event is still ongoing
+    public boolean checkDate(){
+
+        // declaring shared of type SharedPreferences
+        SharedPreferences shared = getSharedPreferences("SHUTTER_SHARE", MODE_PRIVATE);
+
+        // initializing the dateFormat, date, and calendar variables which
+        // will be used to get the current date and also determine the endDate
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        Calendar c = Calendar.getInstance();
+        Date currentDate = c.getTime();
+
+        // getting the date and days from shared preferences
+        String eventDate = shared.getString("date", "");
+        int days = shared.getInt("days", 0);
+
+        // try-catch to pared the String eventDate that was saved in shared preferences from the database
+        try {
+            c.setTime(dateFormat.parse(eventDate));
+        }catch (ParseException e){
+            e.printStackTrace();
+        }
+
+        c.add(Calendar.DATE, days); // adding the number of days to the eventDate to get the endDate
+        Date endDate =  c.getTime();    // getting the endDate
+
+        Log.v(TAG, eventDate);
+        Log.v(TAG,dateFormat.format(endDate));
+
+        // condition to check if the current date less than or equal to expiration date
+        // if true the will return true.
+        if (currentDate.after(endDate)){
+            Log.v(TAG, "Event has expired");
+            return false;
+        }
+
+        Log.v(TAG, "Event is still going on");
+        return true;
     }
 
 
@@ -176,14 +163,132 @@ public class EventCode extends AppCompatActivity {
     // method that will place information in the shared prefrences of the device
     // this will be used to determine if the user is a firstimer to the app.
     // if not then portions of the app will be bypassed.
-    public void saveInformation(String eventcode, String descripition, String date, int days) {
+    public void saveInformation() {
         SharedPreferences shared = getSharedPreferences("SHUTTER_SHARE", MODE_PRIVATE);
         SharedPreferences.Editor editor = shared.edit();
+
         editor.putString("eventcode", eventcode);
         editor.putString("description", description);
         editor.putString("date", date);
         editor.putInt("days", days);
         editor.commit();
+    }
+
+
+
+    /* method that asyncronously check if the eventCode exists in the database
+     if does exist it will save information retrieved from the databse to the
+     shared preferences and send the user to the main activity. If it doesn't
+     exist the code will prompt user via toast and then take them back to enter
+     a different eventCode. */
+    class CheckEventCode extends AsyncTask<String, String, String> {
+
+
+         // Before starting background thread Show Progress Dialog
+        // indicates to user how long the check has left
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(EventCode.this);
+            pDialog.setMessage("Checking Event Code. Please wait...");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(true);
+            pDialog.show();
+        }
+
+
+            // getting the eventcode information from the background thread
+            // will save shared information and redirect to Main if it exsits
+            // otherwise will return user to enter a different eventCode.
+            protected String doInBackground(String... args) {
+
+                    // Building Parameters
+                    List<NameValuePair> params = new ArrayList<NameValuePair>();
+                    params.add(new BasicNameValuePair("eventcode", eventcode));
+
+
+                    // getting eventCode details by making HTTP request
+                    JSONObject json = jsonParser.makeHttpRequest(
+                        UploadConfig.CHECK_URL, "POST", params);
+
+                        // try checing the the database catch any issues in connecting
+                        try {
+
+                            // Check your log cat for JSON reponse
+                            Log.d("Event Info: ", json.toString());
+
+                            // Checking for SUCCESS TAG
+                            success = json.getInt("success");
+
+                            if (success == 1) {
+                                // products found
+                                // Getting Array of Products
+                                event = json.getJSONArray("event");
+
+                                // looping through all the elements in an Event
+                                for (int i = 0; i < event.length(); i++) {
+                                    JSONObject c = event.getJSONObject(i);
+
+                                    // Storing each json item in variable
+                                    eventcode = c.getString("eventcode");           // eventCode
+                                    description = c.getString("description");       // event description
+                                    days = c.getInt("days");                        // # of days for the event
+                                    date = c.getString("date");                     // the start date of the event
+
+                                }
+
+                            } else {
+                                // no eventCode found
+                                runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "Sorry Invalid Event Code!", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                return null; // returning null if successful
+            }
+
+
+
+        // method that executes after background method is complete
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog after getting eventCode
+            pDialog.dismiss();
+
+            // updating UI from Background Thread
+            runOnUiThread(new Runnable() {
+                public void run() {
+
+
+                    // condition if database query successful update shared preferences by
+                    // calling saveInformation method and then the submit method to take user
+                    // to main. Otherwise call tryAgain method
+                    if(success == 1){
+                        saveInformation();
+
+                        // condition to check the eventDate to make sure the event hasn't expired
+                        // if not send user to Main. If it is expired return user to eventCode page.
+                        if (checkDate()){
+                            submit();
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(),"Sorry Invalid Event Code!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    else{
+                        Toast.makeText(getApplicationContext(),"Sorry Invalid Event Code!", Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            });
+
+        }
+
     }
 
 }

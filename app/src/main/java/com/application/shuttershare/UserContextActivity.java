@@ -39,17 +39,17 @@ public class UserContextActivity extends FragmentActivity {
         setContentView(R.layout.activity_user_context);
 
         SharedPreferences shared = getSharedPreferences("SHUTTER_SHARE", MODE_PRIVATE);
+        String eventcode = shared.getString("eventcode", "");
 
         // condition that will check if variable seasoned exists in shared prefrences if it does
         // it will by pass the activity and move to the next
-        if (shared.contains("seasoned")) {
+        if (!eventcode.equals("")) {
 
             Intent intent = new Intent(this, EventCode.class);
             startActivity(intent);  // starting the intent
 
         } else {
 
-            saveInformation();
             mPager = (ViewPager) findViewById(R.id.pager);
             mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
             mPager.setAdapter(mPagerAdapter);
@@ -72,7 +72,7 @@ public class UserContextActivity extends FragmentActivity {
 
     // Pager adapter class that will determine which fragment should appear on the screen
     public class ScreenSlidePagerAdapter extends FragmentPagerAdapter {
-        final int PAGE_COUNT = 4;
+        final int PAGE_COUNT = 3;
 
         // pager adapter method
         public ScreenSlidePagerAdapter(android.support.v4.app.FragmentManager fm) {
@@ -97,25 +97,12 @@ public class UserContextActivity extends FragmentActivity {
                     return UserContextActivityFragment1.newInstance(position);
                 case 2:
                     return UserContextActivityFragment2.newInstance(position);
-                case 3:
-                    return UserContextActivityFragment3.newInstance(position);
+
                 default:
                     return null;
             }
         }
 
     }
-
-
-    // method that will place information in the shared prefrences of the device
-    // this will be used to determine if the user is a firstimer to the app.
-    // if not then portions of the app will be bypassed.
-    public void saveInformation() {
-        SharedPreferences shared = getSharedPreferences("SHUTTER_SHARE", MODE_PRIVATE);
-        SharedPreferences.Editor editor = shared.edit();
-        editor.putBoolean("seasoned", true);
-        editor.commit();
-    }
-
 
 }

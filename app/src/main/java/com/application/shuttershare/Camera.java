@@ -12,10 +12,13 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +47,6 @@ public class Camera extends Fragment{
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private static final String IMAGE_DIRECTORY_NAME = "ShutterShare";
     private Uri outPutfileUri; // file url to store image
-    private ImageView imgPreview;
 
     /**
      * Use this factory method to create a new instance of
@@ -67,9 +69,7 @@ public class Camera extends Fragment{
         // Required empty public constructor
     }
 
-    Button ClickMe;
-    TextView tv;
-
+    ImageButton ClickMe;
 
     // onCreate variable for fragment
     @Override
@@ -85,9 +85,15 @@ public class Camera extends Fragment{
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_camera, container, false);
 
-        imgPreview = (ImageView) rootView.findViewById(R.id.imgPreview);
+        SharedPreferences shared = this.getActivity().getSharedPreferences("SHUTTER_SHARE", Context.MODE_PRIVATE);
 
-        ClickMe = (Button) rootView.findViewById(R.id.cameraButton);
+        String eventDescription = shared.getString("description", "ShutterShare");
+        TextView event = (TextView) rootView.findViewById(R.id.eventDescription);
+        event.setText(eventDescription);
+        event.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+        event.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+
+        ClickMe = (ImageButton) rootView.findViewById(R.id.cameraButton);
 
         ClickMe.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +112,10 @@ public class Camera extends Fragment{
     public void goGoGadgetCamera (View v){
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        SharedPreferences shared = this.getActivity().getSharedPreferences("SHUTTER_SHARE", Context.MODE_PRIVATE);
+
+        String username = shared.getString("username", "");
+
 
         File mediaStorage = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                 IMAGE_DIRECTORY_NAME);
@@ -125,7 +135,7 @@ public class Camera extends Fragment{
 
         File file;
 
-        file = new File(mediaStorage.getPath() + File.separator + "Image_"+currentDateAndTime+".jpg");
+        file = new File(mediaStorage.getPath() + File.separator + username +"_"+currentDateAndTime+".jpg");
 
         outPutfileUri = Uri.fromFile(file);
 

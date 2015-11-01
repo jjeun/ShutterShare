@@ -1,10 +1,116 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="com.application.shuttershare.Settings">
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.application.shuttershare.SettingsForm"
+    android:background="@color/light_green">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/orangelogo"
+        android:id="@+id/logo"
+        android:layout_alignParentBottom="false"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="80dp"
+        android:layout_marginTop="25dp" />
 
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/settings"
-        android:gravity="center" />
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/submitbutton"
+        android:id="@+id/accountButton"
+        android:layout_alignParentBottom="false"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/eventCode"
+        android:layout_marginTop="25dp" />
+
+    <ImageButton
+        android:layout_width="175dp"
+        android:layout_height="100dp"
+        android:background="@drawable/createeventbutton"
+        android:id="@+id/createEventButton"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/accountButton" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/userName"
+        android:background="@color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/textView2"
+        android:layout_marginBottom="50dp"
+        android:textSize="30sp"
+        android:textAlignment="center" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/userEmail"
+        android:background="@color/white"
+        android:layout_marginBottom="50dp"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/userName"
+        android:layout_alignStart="@+id/userName"
+        android:layout_below="@+id/textView3"
+        android:textSize="30sp"
+        android:textAlignment="center" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/eventCode"
+        android:background="@color/white"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/userName"
+        android:layout_alignStart="@+id/userName"
+        android:layout_below="@+id/textView4"
+        android:layout_marginBottom="25dp"
+        android:textSize="30sp"
+        android:textAlignment="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Full Name"
+        android:textColor="@color/orange"
+        android:id="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/logo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Email Address"
+        android:textColor="@color/orange"
+        android:id="@+id/textView3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/userName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Event Code"
+        android:textColor="@color/orange"
+        android:id="@+id/textView4"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_below="@+id/userEmail" />
 
 </RelativeLayout>
+

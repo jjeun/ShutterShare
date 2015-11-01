@@ -1,28 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-
-
-    <!-- color codes for tabs and slider-->
-    <color name="sliderBackground">#81c784</color>
-    <color name="sliderFont">#1b5e20</color>
-    <color name="tabIndicator">#3c393a</color>
-    <color name="underLine">#000000</color>
-
-
-    <!-- color codes for main fragment-->
-    <color name="mainBackground">#f7f8f8</color>
-    <color name="barBackground">#1b5e20</color>
-    <color name="barFont">#ffffff</color>
-    <color name="mainFont">#3c393a</color>
-
-
     <!-- UploadActivity -->
     <color name="textFont">#4e5572</color>
 
 
-    <!-- Generic Colors-->
+    <!-- App Colors-->
     <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="blue">#2e3055</color>
+    <color name="light_green">#c4e5d7</color>
+    <color name="dark_green">#8cbbb4</color>
+    <color name="orange">#b64d2f</color>
 
 
 

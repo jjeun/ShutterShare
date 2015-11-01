@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 /*
 * Authors: Jesse Jeun
@@ -20,7 +21,7 @@ public class Login extends AppCompatActivity {
 
     // Variables declared for the class
     public static final String TAG = "LoginPage";
-    Button submitButton;
+    ImageButton submitButton;
     EditText username;
     EditText email;
 
@@ -30,18 +31,18 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         SharedPreferences shared = getSharedPreferences("SHUTTER_SHARE", MODE_PRIVATE);
-
+        String user = shared.getString("username", "");
 
         // condition that will check if variable username and email exists in shared prefrences if it does
         // it will by pass the activity and move to the next
-        if(shared.contains("username") && shared.contains("email")){
+        if(!user.equals("")){
 
             Intent intent = new Intent(this, EventCode.class);
             startActivity(intent);  // starting the intent
 
         } else {
 
-            submitButton = (Button) findViewById(R.id.loginButton);
+            submitButton = (ImageButton) findViewById(R.id.loginButton);
             username = (EditText) findViewById(R.id.name);
             email = (EditText) findViewById(R.id.email);
 

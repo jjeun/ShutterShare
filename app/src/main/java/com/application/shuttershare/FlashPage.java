@@ -34,63 +34,18 @@ public class FlashPage extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                checkFirstRun();
+                submit();
             }
         }.start();
     }
 
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_flash_page, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-// Checks if program should display user context activity or go straight to main activity
-    public void checkFirstRun() {
-        boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
-        if (isFirstRun){
-
-            submit();
-
-            getSharedPreferences("PREFERENCE", MODE_PRIVATE)
-                    .edit()
-                    .putBoolean("isFirstRun", false)
-                    .apply();
-        }
-        else{
-            closeScreen();
-
-        }
-    }
-
     // Method to create intent and activate it
     public void submit(){
 
         // creating object intent of class Intent that will redirect to MainActivity page
-        Intent intent = new Intent(this, EventCode.class);
+        Intent intent = new Intent(this, UserContextActivity.class);
         startActivity(intent);  // starting the intent
     }
 
-    private void closeScreen() {
-        Intent intent = new Intent(this, UserContextActivity.class);
-        startActivity(intent);
-        finish();
-    }
 }

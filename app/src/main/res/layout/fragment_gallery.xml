@@ -16,7 +16,7 @@
     <ImageButton
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/camerabutton"
+        android:background="@drawable/gallerybutton"
         android:id="@+id/galleryButton"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="false"

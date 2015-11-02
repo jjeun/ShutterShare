@@ -24,7 +24,7 @@ public class UserContextActivityFragment1 extends Fragment {
     // Variables declared for the class
     public static final String ARG_PAGE = "ARG_PAGE";
     public static final String TAG = "ContextActivityFragment";
-    private ImageButton exitButton;
+   // private ImageButton exitButton;
 
     public UserContextActivityFragment1() {
         // Required empty public constructor

@@ -55,7 +55,7 @@ public class UserContextActivityFragment extends Fragment {
 
         // creating object rootView that is istantiated to value of type ViewGroup
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_user_context, container, false);
-
+/*
             // intializing exitButton to value of type ImageButton with id exitButton
             exitButton = (ImageButton) rootView.findViewById(R.id.exitButton);
 
@@ -69,6 +69,7 @@ public class UserContextActivityFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), Login.class);
                     startActivity(intent);  // starting the intent
                 }
+ */
             });
 
         return rootView;    //returning the rootView to be displayed on the fragment

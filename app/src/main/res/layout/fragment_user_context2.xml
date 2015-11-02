@@ -33,9 +33,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/indicator"
         android:background="@drawable/indicator3"
-        android:layout_alignParentBottom="false"
-        android:layout_centerHorizontal="true"
         android:layout_above="@+id/exitButton"
-        android:layout_marginBottom="25dp" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

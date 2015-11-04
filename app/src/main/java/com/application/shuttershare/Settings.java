@@ -4,6 +4,7 @@ package com.application.shuttershare;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -46,6 +47,7 @@ public class Settings extends Fragment {
 
     // Variables declared for the class
     ImageButton submitButton;
+    ImageButton eventButton;
     EditText eventCode;
     EditText userName;
     EditText userEmail;
@@ -84,6 +86,14 @@ public class Settings extends Fragment {
     }
 
 
+    public void createEvent(){
+
+        Uri uri = Uri.parse("http://52.27.86.208:8080/ShutterShare");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+
+
 
     // onCreate variable for fragment
     @Override
@@ -108,6 +118,7 @@ public class Settings extends Fragment {
 
         // intializing submitButton to value of type Button with id eventButton
         submitButton = (ImageButton) rootView.findViewById(R.id.accountButton);
+        eventButton = (ImageButton) rootView.findViewById(R.id.createEventButton);
         eventCode = (EditText) rootView.findViewById(R.id.eventCode);
         userName = (EditText) rootView.findViewById(R.id.userName);
         userEmail = (EditText) rootView.findViewById(R.id.userEmail);
@@ -128,6 +139,17 @@ public class Settings extends Fragment {
                 Log.v(TAG, username);
                 Log.v(TAG, email);
                 new CheckEventCode().execute();
+            }
+        });
+
+
+        // creating on click listener for submitButton
+        eventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG, "Submit Button Clicked For Login Page");
+
+                createEvent();
             }
         });
 

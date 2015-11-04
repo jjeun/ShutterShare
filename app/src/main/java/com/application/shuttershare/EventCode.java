@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -44,6 +45,7 @@ public class EventCode extends Activity {
     // Variables declared for the class
     public static final String TAG = "EventCode";
     ImageButton submitButton;
+    ImageButton eventButton;
     EditText eventCode;
 
     int success;
@@ -80,6 +82,7 @@ public class EventCode extends Activity {
 
             // intializing submitButton to value of type Button with id eventButton
             submitButton = (ImageButton) findViewById(R.id.eventButton);
+            eventButton = (ImageButton) findViewById(R.id.createEventButton);
             eventCode = (EditText) findViewById(R.id.eventcode);
 
             // creating on click listener for submitButton
@@ -90,6 +93,17 @@ public class EventCode extends Activity {
                     eventcode = eventCode.getText().toString().trim();
                     Log.v(TAG, eventcode);
                     new CheckEventCode().execute();
+                }
+            });
+
+
+            // creating on click listener for submitButton
+            eventButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v(TAG, "Submit Button Clicked For Login Page");
+
+                    createEvent();
                 }
             });
         }
@@ -174,6 +188,14 @@ public class EventCode extends Activity {
         editor.commit();
     }
 
+
+
+    public void createEvent(){
+
+        Uri uri = Uri.parse("http://52.27.86.208:8080/ShutterShare");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
 
 
     /* method that asyncronously check if the eventCode exists in the database

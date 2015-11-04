@@ -72,9 +72,9 @@ public class UserContextActivityFragment1 extends Fragment {
                 Intent intent = new Intent(getActivity(), Login.class);
                 startActivity(intent);  // starting the intent
             }
-*/
-        });
 
+        });
+*/
         return rootView;    //returning the rootView to be displayed on the fragment
     }
 

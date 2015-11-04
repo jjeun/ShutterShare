@@ -17,25 +17,14 @@
         android:scaleType="fitXY"
         android:layout_gravity="center" />
 
-    <ImageButton
-        android:layout_width="150dp"
-        android:layout_height="100dp"
-        android:id="@+id/exitButton"
-        android:background="@drawable/continuebutton"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="false"
-        android:layout_alignParentRight="false"
-        android:layout_alignParentBottom="true" />
-
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/indicator"
         android:background="@drawable/indicator2"
-        android:layout_alignParentBottom="false"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/exitButton"
-        android:layout_marginBottom="25dp" />
+        android:layout_marginBottom="107dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

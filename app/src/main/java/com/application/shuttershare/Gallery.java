@@ -106,6 +106,9 @@ public class Gallery extends Fragment {
         if (requestCode == LOAD_GALLERY_IMAGE) {
             if (resultCode == getActivity().RESULT_OK) {
 
+                SharedPreferences shared = this.getActivity().getSharedPreferences("SHUTTER_SHARE", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = shared.edit();
+
                 Uri image = data.getData();
 
                 String[] filePathColumn = { MediaStore.Images.Media.DATA };
@@ -116,6 +119,10 @@ public class Gallery extends Fragment {
 
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 outPutfileUri = cursor.getString(columnIndex);
+
+                editor.putString("imageFile", outPutfileUri);
+                editor.commit();
+
                 cursor.close();
 
                 Toast.makeText(getActivity().getApplicationContext(),
@@ -150,7 +157,9 @@ public class Gallery extends Fragment {
         String eventcode = shared.getString("eventcode", "");
         Intent i = new Intent(this.getActivity(), UploadActivity.class);
 
-        i.putExtra("filePath", outPutfileUri);
+        String image = shared.getString("imageFile", "");
+
+        i.putExtra("filePath", image);
         i.putExtra("username", username);
         i.putExtra("eventcode", eventcode);
         startActivity(i);

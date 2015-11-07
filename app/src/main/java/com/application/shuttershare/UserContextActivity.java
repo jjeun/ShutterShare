@@ -43,19 +43,19 @@ public class UserContextActivity extends FragmentActivity {
 
         // condition that will check if variable seasoned exists in shared prefrences if it does
         // it will by pass the activity and move to the next
-//        if (!eventcode.equals("")) {
-//
-//            Intent intent = new Intent(this, EventCode.class);
-//            startActivity(intent);  // starting the intent
-//
-//        } else {
+        if (!eventcode.equals("")) {
+
+            Intent intent = new Intent(this, EventCode.class);
+            startActivity(intent);  // starting the intent
+
+        } else {
 
             mPager = (ViewPager) findViewById(R.id.pager);
             mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
             mPager.setAdapter(mPagerAdapter);
 
         }
-//    }
+    }
 
 
     // onBackPressed method that will flip the fragment back when back button is pressed
@@ -97,7 +97,6 @@ public class UserContextActivity extends FragmentActivity {
                     return UserContextActivityFragment1.newInstance(position);
                 case 2:
                     return UserContextActivityFragment2.newInstance(position);
-
                 default:
                     return null;
             }

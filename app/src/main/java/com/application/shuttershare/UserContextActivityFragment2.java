@@ -2,6 +2,8 @@ package com.application.shuttershare;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 
 /*
@@ -55,7 +58,7 @@ public class UserContextActivityFragment2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // creating object rootView that is istantiated to value of type ViewGroup
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_user_context2, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_user_context2, container, false);
 
         // intializing exitButton to value of type ImageButton with id exitButton
         exitButton = (ImageButton) rootView.findViewById(R.id.exitButton);

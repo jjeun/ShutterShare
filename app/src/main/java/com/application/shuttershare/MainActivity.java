@@ -2,6 +2,7 @@ package com.application.shuttershare;
 
 import android.content.Intent;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -115,11 +116,13 @@ public class MainActivity extends FragmentActivity {
 
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+      public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Override this method in the activity that hosts the Fragment and call super
         // in order to receive the result inside onActivityResult from the fragment.
         super.onActivityResult(requestCode, resultCode, data);
 
     }
+
+
 
 }

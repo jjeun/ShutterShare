@@ -10,7 +10,7 @@
         android:id="@+id/tabs"
         app:pstsShouldExpand="true"
         app:pstsTextAllCaps="true"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="80dp"
         android:background="@color/dark_green"
         android:textSize="20sp"

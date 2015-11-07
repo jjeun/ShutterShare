@@ -40,7 +40,7 @@
         android:layout_marginBottom="50dp"
         android:layout_below="@+id/textView2"
         android:textAlignment="center"
-        android:textSize="30sp" />
+        android:textSize="20sp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -54,7 +54,7 @@
         android:layout_alignStart="@+id/name"
         android:layout_below="@+id/textView3"
         android:textAlignment="center"
-        android:textSize="30sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:layout_width="wrap_content"

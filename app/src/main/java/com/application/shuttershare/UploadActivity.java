@@ -92,6 +92,9 @@ public class UploadActivity extends AppCompatActivity {
     public void returnToMain(){
 
         Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 
@@ -205,29 +208,14 @@ public class UploadActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             Log.e(TAG, "Response from server: " + result);
 
-            // showing the server response in an alert dialog
-            showAlert("Image Uploaded Sucessfully!");
-
             super.onPostExecute(result);
+
+            Toast.makeText(getApplicationContext(),
+                    "Image Uploaded Successfully!", Toast.LENGTH_SHORT)
+                    .show();
 
             returnToMain();
         }
-    }
-
-    /**
-     * Method to show alert dialog
-     * */
-    private void showAlert(String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(message).setTitle("ShutterShare")
-                .setCancelable(false)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // do nothing
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
     }
 
 }

@@ -7,9 +7,10 @@
     tools:context="com.application.shuttershare.UserContextActivityFragment"
     android:background="@color/blue">
 
+
     <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/context3"
         android:src="@drawable/context3"
         android:layout_centerVertical="true"

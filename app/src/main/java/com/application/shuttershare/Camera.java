@@ -10,7 +10,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Config;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -25,8 +27,10 @@ import android.widget.Toast;
 import android.support.v7.app.AppCompatActivity;
 
 import java.io.File;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.IllegalFormatCodePointException;
 
 
 /*
@@ -113,6 +117,7 @@ public class Camera extends Fragment{
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         SharedPreferences shared = this.getActivity().getSharedPreferences("SHUTTER_SHARE", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = shared.edit();
 
         String username = shared.getString("username", "");
 
@@ -138,6 +143,8 @@ public class Camera extends Fragment{
         file = new File(mediaStorage.getPath() + File.separator + username +"_"+currentDateAndTime+".jpg");
 
         outPutfileUri = Uri.fromFile(file);
+        editor.putString("imageFile", outPutfileUri.toString());
+        editor.commit();
 
         //launch camera
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outPutfileUri);
@@ -145,7 +152,6 @@ public class Camera extends Fragment{
         // start of the image capture intent
         startActivityForResult(intent, CAMERA_CAPTURE_IMAGE_REQUEST_CODE);
 
-//        startActivityForResult(intent,111);
     }
 
 
@@ -188,12 +194,17 @@ public class Camera extends Fragment{
         String username = shared.getString("username", "");
         String eventcode = shared.getString("eventcode", "");
         Intent i = new Intent(this.getActivity(), UploadActivity.class);
-        
+
+        String image = shared.getString("imageFile", "");
+        outPutfileUri = Uri.parse(image);
+
         i.putExtra("filePath", outPutfileUri.getPath());
         i.putExtra("username", username);
         i.putExtra("eventcode", eventcode);
         startActivity(i);
     }
+
+
 }
 
 

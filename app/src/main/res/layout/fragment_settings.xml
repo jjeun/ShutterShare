@@ -1,3 +1,8 @@
+<ScrollView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -14,7 +19,7 @@
         android:id="@+id/logo"
         android:layout_alignParentBottom="false"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="50dp"
         android:layout_marginTop="25dp" />
 
     <ImageButton
@@ -25,10 +30,10 @@
         android:layout_alignParentBottom="false"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/eventCode"
-        android:layout_marginTop="25dp" />
+        android:layout_marginTop="0dp" />
 
     <ImageButton
-        android:layout_width="175dp"
+        android:layout_width="160dp"
         android:layout_height="100dp"
         android:background="@drawable/createeventbutton"
         android:id="@+id/createEventButton"
@@ -46,7 +51,7 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/textView2"
         android:layout_marginBottom="50dp"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textAlignment="center" />
 
     <EditText
@@ -57,12 +62,12 @@
         android:id="@+id/userEmail"
         android:background="@color/white"
         android:layout_marginBottom="50dp"
-        android:layout_centerVertical="true"
         android:layout_alignLeft="@+id/userName"
         android:layout_alignStart="@+id/userName"
         android:layout_below="@+id/textView3"
-        android:textSize="30sp"
-        android:textAlignment="center" />
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -71,13 +76,13 @@
         android:ems="10"
         android:id="@+id/eventCode"
         android:background="@color/white"
-        android:layout_centerVertical="true"
         android:layout_alignLeft="@+id/userName"
         android:layout_alignStart="@+id/userName"
         android:layout_below="@+id/textView4"
         android:layout_marginBottom="25dp"
-        android:textSize="30sp"
-        android:textAlignment="center" />
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -114,3 +119,4 @@
 
 </RelativeLayout>
 
+</ScrollView>

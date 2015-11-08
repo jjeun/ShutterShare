@@ -1,5 +1,13 @@
 package com.application.shuttershare;
 
+/*
+* Authors: Jesse Jeun
+* Date: 10-19-2015
+* Description: Class that hold server connection information.
+*       Can change the addresses here to hit different servers and php's that will
+*       be used to access the database.
+*/
+
 
 public class UploadConfig {
 

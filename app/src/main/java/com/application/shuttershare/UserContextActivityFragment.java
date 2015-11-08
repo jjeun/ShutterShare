@@ -55,23 +55,7 @@ public class UserContextActivityFragment extends Fragment {
 
         // creating object rootView that is istantiated to value of type ViewGroup
         View rootView = inflater.inflate(R.layout.fragment_user_context, container, false);
-/*
-            // intializing exitButton to value of type ImageButton with id exitButton
-            exitButton = (ImageButton) rootView.findViewById(R.id.exitButton);
 
-            // creating on click listener for exitButton
-            exitButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.v(TAG, "Exit Button Clicked ContextFragment");
-
-                    // creating object intent of class Intent that will redirect to Login page
-                    Intent intent = new Intent(getActivity(), Login.class);
-                    startActivity(intent);  // starting the intent
-                }
-
-            });
- */
         return rootView;    //returning the rootView to be displayed on the fragment
     }
 

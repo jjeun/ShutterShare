@@ -33,10 +33,20 @@ import org.apache.http.util.EntityUtils;
 import java.io.File;
 import java.io.IOException;
 
+
+
+/*
+* Authors: Jesse Jeun
+* Date: 10-19-2015
+* Description: Upload activity that will show the user the progress of their
+*       upload to the server.
+*/
+
+
 public class UploadActivity extends AppCompatActivity {
 
+    // declaring global variables that will be used in the class
     private final String TAG = "UploadActivity";
-
     private ProgressBar progressBar;
     private String filePath = null;
     private String username = null;
@@ -45,6 +55,8 @@ public class UploadActivity extends AppCompatActivity {
     private ImageView imgPreview;
     long totalSize = 0;
 
+
+    // onCreate method
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,23 +71,22 @@ public class UploadActivity extends AppCompatActivity {
         username = i.getStringExtra("username");
         eventcode = i.getStringExtra("eventcode");
 
-
+        // initializing the elements of the page to variables
         uploadPercentage = (TextView) findViewById(R.id.uploadPercentage);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         imgPreview = (ImageView) findViewById(R.id.imgPreview);
 
-
+        // condition that will execute if the filepath exists
         if (filePath != null) {
-            // Displaying the image on the screen
-            previewMedia();
+            previewMedia(); // calling previewMedia method
         } else {
             Toast.makeText(getApplicationContext(),
                     "Sorry, file path is missing!", Toast.LENGTH_LONG).show();
 
-            returnToMain();
+            returnToMain();  // calling returnToMain method
         }
 
-        new UploadFileToServer().execute();
+        new UploadFileToServer().execute();  // executing the class the UploadFileToServer
     }
 
 
@@ -90,19 +101,20 @@ public class UploadActivity extends AppCompatActivity {
 
     // method that will return user to the main activity without uploading the photo
     public void returnToMain(){
-
+        // creating new intent and removing info from the stack so user cannot
+        // return by pressing back button
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        startActivity(intent);
+        startActivity(intent);  // starting new intent
     }
 
 
 
     // Displaying a preview of the image
     private void previewMedia() {
-
+            // making the preview image visible
             imgPreview.setVisibility(View.VISIBLE);
 
             // bimatp factory
@@ -112,11 +124,11 @@ public class UploadActivity extends AppCompatActivity {
             // images
             options.inSampleSize = 8;
 
-            final Bitmap bitmap = BitmapFactory.decodeFile(filePath, options);
+            final Bitmap bitmap = BitmapFactory.decodeFile(filePath, options); // turning image into bitmap
 
-            Bitmap orientedBitmap = ExifUtil.rotateBitmap(filePath, bitmap);
+            Bitmap orientedBitmap = ExifUtil.rotateBitmap(filePath, bitmap);  // adjuting orientation of the image
 
-            imgPreview.setImageBitmap(orientedBitmap);
+            imgPreview.setImageBitmap(orientedBitmap); // setting imageview to the adjust image
     }
 
 
@@ -124,6 +136,7 @@ public class UploadActivity extends AppCompatActivity {
     /* Class that will upload the file to the server*/
     private class UploadFileToServer extends AsyncTask<Void, Integer, String> {
 
+        // pre execution method
         @Override
         protected void onPreExecute() {
             // setting progress bar to zero
@@ -131,7 +144,7 @@ public class UploadActivity extends AppCompatActivity {
             super.onPreExecute();
         }
 
-
+        // method to update the progress bar
         @Override
         protected void onProgressUpdate(Integer... progress) {
             // Making progress bar visible
@@ -144,21 +157,27 @@ public class UploadActivity extends AppCompatActivity {
             uploadPercentage.setText(String.valueOf(progress[0]) + "%");
         }
 
-
+        // method called to run in background
         @Override
         protected String doInBackground(Void... params) {
-            return uploadFile();
+            return uploadFile();  // calling and returning value from method uploadFile.
         }
 
 
+        // method that will upload file
         @SuppressWarnings("deprecation")
         private String uploadFile() {
+            // declaring variables
             String responseString;
 
+            // declaring and creating instances of http client / http post
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(UploadConfig.UPLOAD_URL);
 
+            // try uploading
             try {
+
+                // calling AndroidMultiPartEntity class that will monitor progress of upload
                 AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
                         new AndroidMultiPartEntity.ProgressListener() {
 
@@ -168,7 +187,7 @@ public class UploadActivity extends AppCompatActivity {
                             }
                         });
 
-
+                // creating File variable
                 File sourceFile = new File(filePath);
 
                 // Adding file data to http body
@@ -185,6 +204,7 @@ public class UploadActivity extends AppCompatActivity {
                 HttpResponse response = httpclient.execute(httppost);
                 HttpEntity r_entity = response.getEntity();
 
+                // retrieving status code from server response
                 int statusCode = response.getStatusLine().getStatusCode();
                 if (statusCode == 200) {
                     // Server response
@@ -204,6 +224,7 @@ public class UploadActivity extends AppCompatActivity {
 
         }
 
+        // method that executes once everything in class has run
         @Override
         protected void onPostExecute(String result) {
             Log.e(TAG, "Response from server: " + result);
@@ -214,7 +235,7 @@ public class UploadActivity extends AppCompatActivity {
                     "Image Uploaded Successfully!", Toast.LENGTH_SHORT)
                     .show();
 
-            returnToMain();
+            returnToMain();  // calling method returnToMain
         }
     }
 

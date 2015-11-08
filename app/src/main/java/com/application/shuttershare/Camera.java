@@ -51,6 +51,7 @@ public class Camera extends Fragment{
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
     private static final String IMAGE_DIRECTORY_NAME = "ShutterShare";
     private Uri outPutfileUri; // file url to store image
+    ImageButton ClickMe;
 
     /**
      * Use this factory method to create a new instance of
@@ -69,11 +70,11 @@ public class Camera extends Fragment{
     }
 
 
+    // empty default constructor
     public Camera() {
         // Required empty public constructor
     }
 
-    ImageButton ClickMe;
 
     // onCreate variable for fragment
     @Override
@@ -89,16 +90,19 @@ public class Camera extends Fragment{
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_camera, container, false);
 
+        // declaring and initializing shared prefrences function of android devices. Holds in memory
+        // variablse given to it for the life of the application
         SharedPreferences shared = this.getActivity().getSharedPreferences("SHUTTER_SHARE", Context.MODE_PRIVATE);
+        String eventDescription = shared.getString("description", "ShutterShare"); // retrieving variable description in shared preferences initialized to eventDescription
 
-        String eventDescription = shared.getString("description", "ShutterShare");
+        // programmically setting of the TextView "eventDescripition" to different style settings
         TextView event = (TextView) rootView.findViewById(R.id.eventDescription);
         event.setText(eventDescription);
         event.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
         event.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
 
+        // initializing and implementing the ImageButton that will initiate the camera function
         ClickMe = (ImageButton) rootView.findViewById(R.id.cameraButton);
-
         ClickMe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,25 +111,29 @@ public class Camera extends Fragment{
             }
         });
 
-        return rootView;
+        return rootView;  //  return fragment view
 
     }
 
 
     // Code for functionality of camera
     public void goGoGadgetCamera (View v){
+
         // create Intent to take a picture and return control to the calling application
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        // declaring and intializing shared preferences function on android devices and also initializing the editor
+        // to write to shared preferences
         SharedPreferences shared = this.getActivity().getSharedPreferences("SHUTTER_SHARE", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = shared.edit();
 
-        String username = shared.getString("username", "");
+        String username = shared.getString("username", "");  // getting variable username from shared preferences
 
 
         File mediaStorage = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-                IMAGE_DIRECTORY_NAME);
+                IMAGE_DIRECTORY_NAME);  // creating a new directory that the images will be stored
 
-        // Create the storage directory if it does not exist
+        // condition used to check if storage directory is created or not
         if (!mediaStorage.exists()) {
             if (!mediaStorage.mkdirs()) {
                 Log.d(IMAGE_DIRECTORY_NAME, "Oops! Failed create "
@@ -138,11 +146,13 @@ public class Camera extends Fragment{
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd_HHmmss");
         String currentDateAndTime = sdf.format(new Date());
 
+        // declaring File file and initializing it to the path of the specific image being taken
         File file;
-
         file = new File(mediaStorage.getPath() + File.separator + username +"_"+currentDateAndTime+".jpg");
 
+        // getting uri info from the file
         outPutfileUri = Uri.fromFile(file);
+        // storing the string version of the uri into shared preferences to be accessed later
         editor.putString("imageFile", outPutfileUri.toString());
         editor.commit();
 
@@ -167,7 +177,7 @@ public class Camera extends Fragment{
                         "Image Upload Page", Toast.LENGTH_SHORT)
                         .show();
 
-                    launchUpload();
+                    launchUpload();  // calling launchUpload method below
 
             } else if (resultCode == getActivity().RESULT_CANCELED) {
 
@@ -189,19 +199,23 @@ public class Camera extends Fragment{
 
     // method to launch upload
     private void launchUpload(){
+        // calling and declaring a new instance of shared preferences on android devices
         SharedPreferences shared = this.getActivity().getSharedPreferences("SHUTTER_SHARE", Context.MODE_PRIVATE);
 
+        // initializing a new variable to values stored in shared preferences
         String username = shared.getString("username", "");
         String eventcode = shared.getString("eventcode", "");
-        Intent i = new Intent(this.getActivity(), UploadActivity.class);
-
         String image = shared.getString("imageFile", "");
         outPutfileUri = Uri.parse(image);
 
+        // creating a new intent to UploadActivity class
+        Intent i = new Intent(this.getActivity(), UploadActivity.class);
+
+        // creating variable that will be passed to the activity of the intent
         i.putExtra("filePath", outPutfileUri.getPath());
         i.putExtra("username", username);
         i.putExtra("eventcode", eventcode);
-        startActivity(i);
+        startActivity(i);  // start the activity of the intent
     }
 
 

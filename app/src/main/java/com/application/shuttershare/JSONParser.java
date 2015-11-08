@@ -21,6 +21,16 @@ import org.json.JSONObject;
 
 import android.util.Log;
 
+
+/*
+* Authors: Unknown
+* Implemented by: Jesse Jeun
+* Date: 10-19-2015
+* Description: JSONParser class available to developers to parse JSON information.
+*
+*/
+
+
 public class JSONParser {
 
     static InputStream is = null;

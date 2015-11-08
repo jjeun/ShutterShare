@@ -23,7 +23,8 @@ import android.widget.Toast;
 /*
 * Authors: Jesse Jeun
 * Date: 10-19-2015
-* Description: Gallery Fragment - Will hold gallery functionality
+* Description: Gallery Fragment - Holds gallery functionality. Allows user to choose a photo from their
+* gallery that will be uploaded to the server.
 */
 
 
@@ -73,14 +74,19 @@ public class Gallery extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_gallery, container, false);
 
+        // creating an instance of shared preferences in the android device
         SharedPreferences shared = this.getActivity().getSharedPreferences("SHUTTER_SHARE", Context.MODE_PRIVATE);
 
+        //retrieving a variable from shared preferences
         String eventDescription = shared.getString("description", "ShutterShare");
+
+        // programmically changing the styles of text view eventDescription
         TextView event = (TextView) rootView.findViewById(R.id.eventDescription);
         event.setText(eventDescription);
         event.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
         event.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
 
+        // calling and initializing the image button galleryButton
         ImageButton buttonLoadImage = (ImageButton) rootView.findViewById(R.id.galleryButton);
         buttonLoadImage.setOnClickListener(new View.OnClickListener() {
 
@@ -91,45 +97,49 @@ public class Gallery extends Fragment {
                         Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
-                startActivityForResult(intent, LOAD_GALLERY_IMAGE);
+                startActivityForResult(intent, LOAD_GALLERY_IMAGE); // intent that wil activate the gallery function of the device
 
             }
         });
-        return rootView;
+        return rootView;  // return fragment view
     }
 
 
-    // to receive result of camera
+    // to receive result of gallery
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        // if the result is capturing Image
+        // if the result if gallery image is chosen
         if (requestCode == LOAD_GALLERY_IMAGE) {
             if (resultCode == getActivity().RESULT_OK) {
 
+                // calling instance of shared preferences in the android device and the shared preference editor
                 SharedPreferences shared = this.getActivity().getSharedPreferences("SHUTTER_SHARE", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = shared.edit();
 
-                Uri image = data.getData();
 
-                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                Uri image = data.getData(); // of the data passed into the onActivityResult
 
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };  // getting array data of all the gallery info
+
+                // getting the file path of the chosen image in gallery.
                 Cursor cursor = getActivity().getContentResolver().query(image,
                         filePathColumn, null, null, null);
-                cursor.moveToFirst();
+                cursor.moveToFirst(); // moving image to first position
 
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                outPutfileUri = cursor.getString(columnIndex);
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]); // retrieving the column index at first position
+                outPutfileUri = cursor.getString(columnIndex); // getting the uri of the chosen image
 
+                // creating and initializing variable and storing it in shared preferences
                 editor.putString("imageFile", outPutfileUri);
-                editor.commit();
+                editor.commit();  // store value in shared preferences
 
-                cursor.close();
+                cursor.close();  // closing cursor
 
                 Toast.makeText(getActivity().getApplicationContext(),
                         "Image Upload Page", Toast.LENGTH_SHORT)
                         .show();
 
-                launchUpload();
+                launchUpload();  // calling launchUpload method below
 
             } else if (resultCode == getActivity().RESULT_CANCELED) {
 
@@ -151,17 +161,21 @@ public class Gallery extends Fragment {
 
     // method to launch upload
     private void launchUpload(){
+        // calling instance of shared preferences of android device
         SharedPreferences shared = this.getActivity().getSharedPreferences("SHUTTER_SHARE", Context.MODE_PRIVATE);
 
+        // retrieving values from shared preferences
         String username = shared.getString("username", "");
         String eventcode = shared.getString("eventcode", "");
-        Intent i = new Intent(this.getActivity(), UploadActivity.class);
-
         String image = shared.getString("imageFile", "");
 
+        // creating instance of intent for UploadActivity class
+        Intent i = new Intent(this.getActivity(), UploadActivity.class);
+
+        // declaring and intializing variables that will be passed to the intent
         i.putExtra("filePath", image);
         i.putExtra("username", username);
         i.putExtra("eventcode", eventcode);
-        startActivity(i);
+        startActivity(i);  // start the intent activity
     }
 }

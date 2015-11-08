@@ -47,13 +47,11 @@ public class EventCode extends Activity {
     ImageButton submitButton;
     ImageButton eventButton;
     EditText eventCode;
-
     int success;
     String eventcode;
     String description;
     String date;
     int days;
-
     private ProgressDialog pDialog;
     JSONArray event = null;
     JSONParser jsonParser = new JSONParser();
@@ -72,6 +70,8 @@ public class EventCode extends Activity {
         // it will by pass the activity and move to the next
         if (shared.contains("eventcode") && checkDate()) {
 
+            // creating a new intent and also removing the event info from the stack to
+            // prevent the user from returning back to this page
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -114,6 +114,7 @@ public class EventCode extends Activity {
     public void submit(){
 
         // creating object intent of class Intent that will redirect to MainActivity page
+        // also removing info from the stack to prevent user from returning with the back button
         Toast.makeText(getApplicationContext(),"Event Code Success!", Toast.LENGTH_LONG).show();
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -178,18 +179,20 @@ public class EventCode extends Activity {
     // this will be used to determine if the user is a firstimer to the app.
     // if not then portions of the app will be bypassed.
     public void saveInformation() {
+        // calling instance of shared preference of the android device
         SharedPreferences shared = getSharedPreferences("SHUTTER_SHARE", MODE_PRIVATE);
         SharedPreferences.Editor editor = shared.edit();
 
+        // declaring and intializing variables that will be stored in shared preferences
         editor.putString("eventcode", eventcode);
         editor.putString("description", description);
         editor.putString("date", date);
         editor.putInt("days", days);
-        editor.commit();
+        editor.commit();  // sending variable to be stored in shared preferences
     }
 
 
-
+    // method that will send user to mobile website when create event button is clicked
     public void createEvent(){
 
         Uri uri = Uri.parse("http://52.27.86.208:8080/ShutterShare");
@@ -199,7 +202,7 @@ public class EventCode extends Activity {
 
 
     /* method that asyncronously check if the eventCode exists in the database
-     if does exist it will save information retrieved from the databse to the
+     if does exist it will save information retrieved from the database to the
      shared preferences and send the user to the main activity. If it doesn't
      exist the code will prompt user via toast and then take them back to enter
      a different eventCode. */

@@ -9,6 +9,16 @@ import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntity;
 
 
+/*
+Author: Unknown
+Implemented by: Jesse Jeun
+Date: 11-08-2015
+Description: AndroidMulitPartEntity class - a java class that is made available to developers
+    to determine how much of a file has been uploaded to a particular destination and to give the
+    results to a progress function that will represent the amount complete.
+*/
+
+
 
 @SuppressWarnings("deprecation")
 public class AndroidMultiPartEntity extends MultipartEntity
